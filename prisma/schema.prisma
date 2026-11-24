@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Compte d'administration du site (accès distant /admin et Prisma Studio)
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String // hash bcrypt
+  nom       String
+  createdAt DateTime @default(now())
+}
+
+/// Adhérent du BDS (données simples, rien de sensible)
+model Adherent {
+  id           String         @id @default(cuid())
+  prenom       String
+  nom          String
+  email        String         @unique
+  telephone    String?
+  annee        String? // ex : "1A", "2A", "3A"
+  sportPrefere String?
+  createdAt    DateTime       @default(now())
+  inscriptions Inscription[]
+  commandes    Commande[]
+}
+
+/// Annonces publiées sur la page d'accueil (créées depuis l'espace admin)
+model Annonce {
+  id        String   @id @default(cuid())
+  titre     String
+  contenu   String
+  publiee   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Compétition / tournoi auquel on peut s'inscrire
+model Competition {
+  id           String        @id @default(cuid())
+  nom          String
+  sport        String
+  date         DateTime
+  lieu         String
+  description  String?
+  tarif        Float         @default(0)
+  places       Int? // null = illimité
+  cloturee     Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  inscriptions Inscription[]
+}
+
+enum StatutInscription {
+  EN_ATTENTE
+  CONFIRMEE
+  ANNULEE
+}
+
+model Inscription {
+  id            String            @id @default(cuid())
+  adherentId    String
+  adherent      Adherent          @relation(fields: [adherentId], references: [id], onDelete: Cascade)
+  competitionId String
+  competition   Competition       @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+  statut        StatutInscription @default(EN_ATTENTE)
+  createdAt     DateTime          @default(now())
+
+  @@unique([adherentId, competitionId])
+}
+
+/// Produit de la boutique
+model Produit {
+  id          String          @id @default(cuid())
+  nom         String
+  description String?
+  prix        Float
+  stock       Int             @default(0)
+  image       String?
+  actif       Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  lignes      LigneCommande[]
+}
+
+enum StatutCommande {
+  EN_ATTENTE
+  PAYEE
+  ANNULEE
+}
+
+model Commande {
+  id         String         @id @default(cuid())
+  adherentId String?
+  adherent   Adherent?      @relation(fields: [adherentId], references: [id])
+  email      String
+  statut     StatutCommande @default(EN_ATTENTE)
+  total      Float
+  createdAt  DateTime       @default(now())
+  lignes     LigneCommande[]
+}
+
+model LigneCommande {
+  id           String   @id @default(cuid())
+  commandeId   String
+  commande     Commande @relation(fields: [commandeId], references: [id], onDelete: Cascade)
+  produitId    String
+  produit      Produit  @relation(fields: [produitId], references: [id])
+  quantite     Int
+  prixUnitaire Float
+}
