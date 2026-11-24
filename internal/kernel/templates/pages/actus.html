@@ -1,0 +1,18 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "actus_titre"}}</h1>
+{{if .Data.annonces}}
+<div class="liste">
+  {{range .Data.annonces}}
+  <article class="carte annonce">
+    <p class="annonce-date">{{datecourt .CreatedAt}}</p>
+    {{template "badge_annonce" (dict "V" $ "Type" .Type)}}
+    <h3 class="annonce-titre">{{.Titre}}</h3>
+    <p class="annonce-contenu">{{.Contenu}}</p>
+    {{if .Sport}}<p class="annonce-sport">{{.Sport}}</p>{{end}}
+  </article>
+  {{end}}
+</div>
+{{else}}
+<p class="muted">{{t . "annonces_vide"}}</p>
+{{end}}
+{{end}}

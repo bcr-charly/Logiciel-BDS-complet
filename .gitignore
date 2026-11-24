@@ -1,13 +1,10 @@
-node_modules/
-.next/
-out/
-.env
-.env.local
-.env*.local
-*.db
-*.db-journal
-prisma/*.db
-prisma/*.db-journal
-.DS_Store
+# binaire
+/bds
+/bds-*
+*.exe
+# données persistantes (JSON) - ne jamais commiter
+data/*.json
+data/*.tmp
+# divers
 *.log
-next-env.d.ts
+.DS_Store

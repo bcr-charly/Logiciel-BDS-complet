@@ -1,0 +1,26 @@
+{{define "bouton"}}<a class="btn {{.class}}" href="{{.href}}">{{.label}}</a>{{end}}
+
+{{define "badge_annonce"}}<span class="badge badge-{{.Type}}">{{t .V (print "type_" .Type)}}</span>{{end}}
+
+{{define "bande_annonces"}}
+<section class="bande-annonces">
+  <h2 class="section-title">{{t .V "annonces_titre"}}</h2>
+  {{if .Annonces}}
+  <div class="bande">
+    {{range .Annonces}}
+    <article class="carte annonce">
+      <p class="annonce-date">{{datecourt .CreatedAt}}</p>
+      {{template "badge_annonce" (dict "V" $.V "Type" .Type)}}
+      <h3 class="annonce-titre">{{.Titre}}</h3>
+      <p class="annonce-contenu">{{.Contenu}}</p>
+      {{if .Sport}}<p class="annonce-sport">{{.Sport}}</p>{{end}}
+    </article>
+    {{end}}
+  </div>
+  {{else}}
+  <p class="muted">{{t .V "annonces_vide"}}</p>
+  {{end}}
+</section>
+{{end}}
+
+{{define "champ"}}<label class="champ-label">{{.label}}<input class="champ" type="{{.type}}" name="{{.name}}" {{if .value}}value="{{.value}}"{{end}} {{if .required}}required{{end}} {{if .placeholder}}placeholder="{{.placeholder}}"{{end}}></label>{{end}}

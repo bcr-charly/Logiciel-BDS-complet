@@ -1,0 +1,38 @@
+# Configuration du serveur BDS ENSIIE.
+# Redémarrage du serveur requis pour appliquer les changements.
+
+# Réseau : le bloc n'écoute qu'en HTTP, le HTTPS est assuré par le reverse proxy (ARISE)
+host=127.0.0.1
+port=8080
+base_url=http://127.0.0.1:8080
+
+# Secret de signature des cookies de session (OBLIGATOIRE et unique en production,
+# sinon les sessions ne survivent pas aux redémarrages et pourraient être forgées)
+session_secret=dev-secret-a-changer-en-production
+
+# Compte admin initial (créé au premier démarrage si la base est vide,
+# ou via le flag -creer-admin email:motdepasse)
+admin_email=admin@bds-ensiie.fr
+admin_password=admin123
+
+# Paiements HelloAsso (Checkout API v5). Laisser vide = mode démo :
+# les paiements restent EN_ATTENTE et sont validés manuellement par l'admin.
+helloasso_slug=
+helloasso_token=
+helloasso_api=https://api.helloaspro.com
+helloasso_api=https://api.helloasso.com
+# Secret d'URL du webhook : /webhook/helloasso/<webhook_secret>
+webhook_secret=
+
+# SMTP pour les e-mails sortants (vérification de compte). Laisser vide = mode démo :
+# le lien de vérification est journalisé côté serveur.
+smtp_host=
+smtp_port=587
+smtp_user=
+smtp_password=
+smtp_from=bds@ensiie.fr
+
+# Divers
+duree_session_jours=7
+reconciliation_minutes=15
+EOF

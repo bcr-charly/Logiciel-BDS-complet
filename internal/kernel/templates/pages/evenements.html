@@ -1,0 +1,28 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "evenements_titre"}}</h1>
+{{if .Data.evenements}}
+<div class="liste">
+  {{range .Data.evenements}}
+  <article class="carte">
+    <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:baseline;">
+      <h3 style="margin:0;"><a href="/evenements/{{.evt.ID}}">{{.evt.Nom}}</a></h3>
+      <span class="badge badge-{{.evt.Sport}}">{{.evt.Sport}}</span>
+    </div>
+    <p class="muted" style="margin:.4rem 0 0;font-size:.9rem;">{{date .evt.Date}} — {{.evt.Lieu}}</p>
+    {{if .evt.Description}}<p style="margin:.4rem 0 0;font-size:.9rem;line-height:1.5;">{{.evt.Description}}</p>{{end}}
+    <p style="margin:.5rem 0 0;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--or-champagne);">
+      {{if .evt.Cloturee}}<span class="badge badge-cloture">{{t $ "evt_cloture"}}</span>
+      {{else if .complet}}<span class="badge badge-cloture">{{t $ "evt_complet"}}</span>
+      {{else if .evt.Tarif}}{{t $ "evt_tarif"}} : {{prix .evt.Tarif}}{{else}}{{t $ "evt_gratuit"}}{{end}}
+      — {{if .illimite}}{{t $ "evt_illimite"}}{{else}}{{.restantes}} {{t $ "evt_restantes"}} / {{.evt.PlacesMax}}{{end}}
+      ({{.inscrits}} {{t $ "evt_inscrits"}})
+      {{if .evt.ExigeCotiz}} · {{t $ "evt_cotiz_requise"}}{{end}}
+      {{if .evt.ExigeLicence}} · {{t $ "evt_licence_requise"}}{{end}}
+    </p>
+  </article>
+  {{end}}
+</div>
+{{else}}
+<p class="muted">{{t . "evenements_vide"}}</p>
+{{end}}
+{{end}}

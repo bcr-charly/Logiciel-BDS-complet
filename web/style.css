@@ -1,0 +1,220 @@
+/* Palette officielle BDS ENSIIE — maillot noir satin & or */
+:root {
+  --noir-profond: #191718;
+  --noir-charbon: #2a2629;
+  --reflet-satin: #555253;
+  --bronze-sombre: #6c6149;
+  --or-champagne: #b5a681;
+  --or-satin: #ddcb95;
+  --eclat: #f2e3b3;
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--noir-profond);
+  background-image:
+    radial-gradient(1200px 620px at 12% -10%, rgba(85, 82, 83, 0.38), transparent 62%),
+    radial-gradient(900px 480px at 88% 8%, rgba(42, 38, 41, 0.9), transparent 70%),
+    radial-gradient(1100px 560px at 82% 112%, rgba(108, 97, 73, 0.28), transparent 62%),
+    radial-gradient(700px 380px at 30% 55%, rgba(85, 82, 83, 0.14), transparent 70%);
+  background-attachment: fixed;
+  color: var(--eclat);
+  font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+::selection { background: var(--or-champagne); color: var(--noir-profond); }
+
+a { color: var(--or-satin); }
+
+/* ---- header (maquette : logo + boutons + drapeau) ---- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(25, 23, 24, 0.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(108, 97, 73, 0.6);
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+.brand-logo { height: 44px; width: auto; border-radius: 8px; border: 1px solid rgba(181, 166, 129, 0.6); }
+.brand-text {
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: linear-gradient(100deg, var(--eclat), var(--or-satin) 35%, var(--or-champagne) 70%, var(--bronze-sombre));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.nav { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.nav .inline { display: inline; margin: 0; }
+.lang-switch { margin-left: 0.5rem; font-size: 1.1rem; }
+.lang-switch a { text-decoration: none; opacity: 0.45; margin-right: 0.25rem; }
+.lang-switch a.active { opacity: 1; }
+
+.ligne-or {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--or-champagne) 20%, var(--eclat) 50%, var(--or-champagne) 80%, transparent);
+}
+
+/* ---- boutons ---- */
+.btn {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid rgba(181, 166, 129, 0.6);
+  color: var(--or-satin);
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s, filter 0.15s;
+}
+.btn:hover { border-color: var(--eclat); color: var(--eclat); }
+.btn-gold {
+  background: linear-gradient(120deg, var(--eclat), var(--or-satin) 35%, var(--or-champagne) 85%);
+  color: var(--noir-profond);
+  border-color: transparent;
+}
+.btn-gold:hover { filter: brightness(1.1); color: var(--noir-profond); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-danger { border-color: rgba(160, 60, 60, 0.8); color: #e0a0a0; }
+.btn-danger:hover { border-color: #e0a0a0; color: #f0c0c0; }
+.btn-big { padding: 0.9rem 1.8rem; font-size: 1rem; }
+
+/* ---- layout général ---- */
+.main { flex: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+.footer { border-top: 1px solid rgba(108, 97, 73, 0.6); background: rgba(42, 38, 41, 0.6); }
+.footer-inner { max-width: 1100px; margin: 0 auto; padding: 1.2rem 1rem 2rem; text-align: center; }
+.footer-brand { font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+  background: linear-gradient(100deg, var(--eclat), var(--or-satin) 40%, var(--or-champagne));
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.footer-contact, .footer-partenaires { color: rgba(181, 166, 129, 0.85); font-size: 0.85rem; }
+
+.flash {
+  border: 1px solid rgba(181, 166, 129, 0.6);
+  background: rgba(181, 166, 129, 0.12);
+  color: var(--eclat);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.section-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0 0 1.2rem;
+  background: linear-gradient(100deg, var(--eclat), var(--or-satin) 40%, var(--or-champagne) 75%, var(--bronze-sombre));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.muted { color: rgba(181, 166, 129, 0.8); }
+
+/* ---- cartes & bande d'annonces ---- */
+.carte {
+  background: linear-gradient(160deg, rgba(42, 38, 41, 0.92), rgba(25, 23, 24, 0.96));
+  border: 1px solid rgba(108, 97, 73, 0.55);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(242, 227, 179, 0.07);
+}
+.bande { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.bande-annonces { margin-top: 2.5rem; }
+.annonce-date { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--reflet-satin); margin: 0 0 0.4rem; }
+.annonce-titre { margin: 0.3rem 0; color: var(--eclat); font-size: 1.05rem; }
+.annonce-contenu { margin: 0.3rem 0 0; color: rgba(221, 203, 149, 0.9); font-size: 0.9rem; line-height: 1.5; }
+.annonce-sport { margin: 0.4rem 0 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--or-champagne); }
+
+.badge {
+  display: inline-block;
+  border: 1px solid rgba(181, 166, 129, 0.5);
+  color: var(--or-satin);
+  border-radius: 999px;
+  padding: 0.1rem 0.55rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.badge-ouverture { border-color: rgba(120, 180, 120, 0.6); color: #bfe0bf; }
+.badge-resultats { border-color: rgba(181, 166, 129, 0.7); color: var(--eclat); }
+.badge-info { border-color: rgba(85, 82, 83, 0.9); color: var(--or-champagne); }
+.badge-cloture { border-color: rgba(160, 60, 60, 0.8); color: #e0a0a0; }
+
+/* ---- accueil (maquette : grand logo + 2 boutons) ---- */
+.hero { text-align: center; padding: 3rem 1rem 2rem; }
+.hero-logo { height: 220px; width: auto; border-radius: 24px;
+  border: 1px solid rgba(181, 166, 129, 0.6);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 80px rgba(181, 166, 129, 0.12); }
+.hero-accroche { max-width: 640px; margin: 1.5rem auto 0; color: rgba(221, 203, 149, 0.92); font-size: 1.05rem; line-height: 1.6; }
+.hero-actions { margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+/* ---- grilles & listes ---- */
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.liste { display: grid; gap: 1rem; }
+
+/* ---- formulaires ---- */
+.form { display: grid; gap: 0.8rem; max-width: 520px; }
+.form-large { max-width: 720px; }
+.champ-label { display: grid; gap: 0.3rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--or-champagne); }
+.champ {
+  background: rgba(25, 23, 24, 0.9);
+  border: 1px solid rgba(85, 82, 83, 0.85);
+  color: var(--eclat);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+.champ::placeholder { color: rgba(181, 166, 129, 0.5); }
+.champ:focus { outline: none; border-color: var(--or-champagne); box-shadow: 0 0 0 2px rgba(181, 166, 129, 0.25); }
+textarea.champ { min-height: 110px; resize: vertical; }
+
+/* ---- tableaux (admin / resp) ---- */
+.table-wrap { overflow-x: auto; border-radius: 12px; }
+table.table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 640px; }
+.table th {
+  text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(181, 166, 129, 0.85); border-bottom: 1px solid rgba(108, 97, 73, 0.6); padding: 0.55rem 0.7rem;
+}
+.table td { border-bottom: 1px solid rgba(42, 38, 41, 0.8); padding: 0.55rem 0.7rem; vertical-align: top; }
+.table tr:last-child td { border-bottom: none; }
+
+/* ---- sections admin ---- */
+.section { margin-top: 2.2rem; }
+.section h2 { font-size: 1.15rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--or-satin); margin: 0 0 1rem; }
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.8rem; }
+.stat { text-align: center; }
+.stat-valeur { font-size: 1.7rem; font-weight: 800;
+  background: linear-gradient(100deg, var(--eclat), var(--or-champagne));
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(181, 166, 129, 0.8); }
+
+.actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.actions form { margin: 0; }
+
+@media (max-width: 720px) {
+  .hero-logo { height: 150px; }
+  .header-inner { justify-content: center; }
+}

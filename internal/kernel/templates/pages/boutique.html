@@ -1,0 +1,30 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "boutique_titre"}}</h1>
+{{if .Data.articles}}
+<div class="grid" style="margin-top:1.2rem;">
+  {{range .Data.articles}}
+  <article class="carte" style="display:flex;flex-direction:column;">
+    <h3 style="margin:0;">{{.Nom}}</h3>
+    {{if .Description}}<p class="muted" style="margin:.4rem 0;flex:1;font-size:.9rem;line-height:1.5;">{{.Description}}</p>{{end}}
+    <p style="margin:.6rem 0;font-size:1.1rem;font-weight:800;color:var(--eclat);">{{prix .Prix}}</p>
+    <p style="margin:0 0 .8rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;{{if gt .Stock 0}}color:var(--or-satin);{{else}}color:#e0a0a0;{{end}}">
+      {{if gt .Stock 0}}{{t $ "boutique_stock"}} : {{.Stock}}{{else}}{{t $ "boutique_rupture"}}{{end}}
+    </p>
+    {{if gt .Stock 0}}
+    <form method="post" action="/boutique/commander" style="display:grid;gap:.5rem;border-top:1px solid rgba(108,97,73,.5);padding-top:.8rem;">
+      {{csrf $}}
+      <input type="hidden" name="article_id" value="{{.ID}}">
+      {{if not $.User}}{{template "champ" (dict "label" (t $ "champ_email") "type" "email" "name" "email" "required" true)}}{{end}}
+      <label class="champ-label">{{t $ "boutique_quantite"}}
+        <input class="champ" type="number" name="quantite" min="1" max="{{.Stock}}" value="1" required>
+      </label>
+      <button class="btn btn-gold" type="submit">{{t $ "boutique_commander"}}</button>
+    </form>
+    {{end}}
+  </article>
+  {{end}}
+</div>
+{{else}}
+<p class="muted">{{t . "boutique_vide"}}</p>
+{{end}}
+{{end}}

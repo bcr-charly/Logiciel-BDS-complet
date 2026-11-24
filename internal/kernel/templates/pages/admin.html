@@ -1,0 +1,168 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "admin_titre"}}</h1>
+
+<section class="section">
+  <h2>{{t . "admin_stats"}}</h2>
+  <div class="stats">
+    {{range $k, $v := .Data.stats}}
+    <div class="carte stat"><p class="stat-valeur">{{$v}}</p><p class="stat-label">{{$k}}</p></div>
+    {{end}}
+  </div>
+  {{if not .Data.helloasso}}<p class="muted" style="margin-top:.6rem;font-size:.8rem;">Mode démo : HelloAsso non configuré, les paiements sont validés manuellement ci-dessous.</p>{{end}}
+</section>
+
+<section class="section">
+  <h2>{{t . "admin_annonces"}}</h2>
+  <form method="post" action="/admin/annonces" class="carte form form-large" style="padding:1.2rem;">
+    {{csrf .}}
+    {{template "champ" (dict "label" (t . "champ_titre") "type" "text" "name" "titre" "required" true)}}
+    <label class="champ-label">{{t . "champ_contenu"}}<textarea class="champ" name="contenu" required></textarea></label>
+    <label class="champ-label">{{t . "champ_type"}}
+      <select class="champ" name="type">
+        <option value="info">{{t . "type_info"}}</option>
+        <option value="ouverture">{{t . "type_ouverture"}}</option>
+        <option value="resultats">{{t . "type_resultats"}}</option>
+      </select>
+    </label>
+    {{template "champ" (dict "label" (t . "champ_sport_label") "type" "text" "name" "sport")}}
+    <button class="btn btn-gold" type="submit">{{t . "bouton_creer"}}</button>
+  </form>
+  <div class="liste" style="margin-top:1rem;">
+    {{range .Data.annonces}}
+    <article class="carte">
+      <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div>
+          {{template "badge_annonce" (dict "V" $ "Type" .Type)}}
+          <strong style="margin-left:.4rem;">{{.Titre}}</strong>
+          {{if .Sport}}<span class="badge" style="margin-left:.4rem;">{{.Sport}}</span>{{end}}
+          {{if not .Publiee}}<span class="badge badge-cloture" style="margin-left:.4rem;">masquée</span>{{end}}
+          <p class="muted" style="margin:.3rem 0 0;font-size:.9rem;">{{.Contenu}}</p>
+        </div>
+        <div class="actions">
+          <form method="post" action="/admin/annonces/{{.ID}}/basculer">{{csrf $}}<button class="btn btn-outline" type="submit">{{if .Publiee}}{{t $ "bouton_masquer"}}{{else}}{{t $ "bouton_publier"}}{{end}}</button></form>
+          <form method="post" action="/admin/annonces/{{.ID}}/supprimer" data-confirm="Supprimer cette annonce ?">{{csrf $}}<button class="btn btn-danger" type="submit">{{t $ "bouton_supprimer"}}</button></form>
+        </div>
+      </div>
+    </article>
+    {{end}}
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{t . "admin_evenements"}}</h2>
+  <form method="post" action="/admin/evenements" class="carte form form-large" style="padding:1.2rem;">
+    {{csrf .}}
+    {{template "champ" (dict "label" (t . "champ_nom") "type" "text" "name" "nom" "required" true)}}
+    {{template "champ" (dict "label" (t . "champ_sport_label") "type" "text" "name" "sport" "required" true)}}
+    {{template "champ" (dict "label" (t . "champ_date") "type" "datetime-local" "name" "date" "required" true)}}
+    {{template "champ" (dict "label" (t . "champ_lieu") "type" "text" "name" "lieu" "required" true)}}
+    <label class="champ-label">{{t . "champ_description"}}<textarea class="champ" name="description"></textarea></label>
+    {{template "champ" (dict "label" (t . "champ_tarif") "type" "number" "name" "tarif")}}
+    {{template "champ" (dict "label" (t . "champ_places") "type" "number" "name" "places")}}
+    <label class="champ-label"><input type="checkbox" name="exige_cotiz"> {{t . "evt_cotiz_requise"}}</label>
+    <label class="champ-label"><input type="checkbox" name="exige_licence"> {{t . "evt_licence_requise"}}</label>
+    <button class="btn btn-gold" type="submit">{{t . "bouton_creer"}}</button>
+  </form>
+  <div class="table-wrap carte" style="margin-top:1rem;padding:0;overflow:hidden;">
+    <table class="table">
+      <tr><th>{{t . "champ_nom"}}</th><th>{{t . "champ_sport_label"}}</th><th>{{t . "evt_date"}}</th><th>{{t . "champ_lieu"}}</th><th>{{t . "evt_tarif"}}</th><th></th></tr>
+      {{range .Data.evenements}}
+      <tr>
+        <td><a href="/evenements/{{.ID}}">{{.Nom}}</a></td>
+        <td>{{.Sport}}</td>
+        <td>{{date .Date}}</td>
+        <td>{{.Lieu}}</td>
+        <td>{{if .Tarif}}{{prix .Tarif}}{{else}}{{t $ "evt_gratuit"}}{{end}} {{if .Cloturee}}<span class="badge badge-cloture">{{t $ "evt_cloture"}}</span>{{end}}</td>
+        <td class="actions">
+          <form method="post" action="/admin/evenements/{{.ID}}/cloturer">{{csrf $}}<button class="btn btn-outline" type="submit">{{if .Cloturee}}{{t $ "bouton_rouvrir"}}{{else}}{{t $ "bouton_cloturer"}}{{end}}</button></form>
+          <a class="btn btn-outline" href="/admin/evenements/{{.ID}}/inscrits.csv">{{t $ "bouton_exporter_csv"}}</a>
+          <form method="post" action="/admin/evenements/{{.ID}}/supprimer" data-confirm="Supprimer cet événement ?">{{csrf $}}<button class="btn btn-danger" type="submit">{{t $ "bouton_supprimer"}}</button></form>
+        </td>
+      </tr>
+      {{end}}
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{t . "admin_articles"}}</h2>
+  <form method="post" action="/admin/articles" class="carte form form-large" style="padding:1.2rem;">
+    {{csrf .}}
+    {{template "champ" (dict "label" (t . "champ_nom") "type" "text" "name" "nom" "required" true)}}
+    <label class="champ-label">{{t . "champ_description"}}<textarea class="champ" name="description"></textarea></label>
+    {{template "champ" (dict "label" (t . "champ_prix") "type" "number" "name" "prix")}}
+    {{template "champ" (dict "label" (t . "champ_stock") "type" "number" "name" "stock")}}
+    <button class="btn btn-gold" type="submit">{{t . "bouton_creer"}}</button>
+  </form>
+  <div class="table-wrap carte" style="margin-top:1rem;padding:0;overflow:hidden;">
+    <table class="table">
+      <tr><th>{{t . "champ_nom"}}</th><th>{{t . "champ_prix"}}</th><th>{{t . "champ_stock"}}</th><th></th></tr>
+      {{range .Data.articles}}
+      <tr>
+        <td>{{.Nom}}</td><td>{{prix .Prix}}</td><td>{{.Stock}}</td>
+        <td><form method="post" action="/admin/articles/{{.ID}}/supprimer" data-confirm="Supprimer cet article ?">{{csrf $}}<button class="btn btn-danger" type="submit">{{t $ "bouton_supprimer"}}</button></form></td>
+      </tr>
+      {{end}}
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{t . "admin_comptes"}}</h2>
+  <p><a class="btn btn-outline" href="/admin/comptes.csv">{{t . "bouton_exporter_csv"}}</a></p>
+  <div class="table-wrap carte" style="margin-top:1rem;padding:0;overflow:hidden;">
+    <table class="table">
+      <tr><th>{{t . "champ_email"}}</th><th>{{t . "champ_nom"}}</th><th>{{t . "profil_cotiz"}}</th><th>{{t . "profil_licence"}}</th><th>roles</th><th></th></tr>
+      {{range .Data.comptes}}
+      <tr>
+        <td>{{.Email}}<br><span class="muted" style="font-size:.75rem;">{{.Login}}</span></td>
+        <td>{{.Prenom}} {{.Nom}}</td>
+        <td>{{if .CotizPayee}}<span class="badge badge-ouverture">{{t $ "statut_payee"}}</span>{{else}}<span class="badge badge-cloture">{{t $ "statut_non_payee"}}</span>{{end}}</td>
+        <td>{{if .LicencePayee}}<span class="badge badge-ouverture">{{t $ "statut_payee"}}</span>{{else}}<span class="badge badge-cloture">{{t $ "statut_non_payee"}}</span>{{end}}</td>
+        <td>{{range .Roles}}<span class="badge" style="margin-right:.2rem;">{{.}}</span>{{end}}</td>
+        <td class="actions">
+          <form method="post" action="/admin/comptes/{{.ID}}/role-admin">{{csrf $}}<button class="btn btn-outline" type="submit">admin</button></form>
+          <form method="post" action="/admin/comptes/{{.ID}}/cotiz">{{csrf $}}<button class="btn btn-outline" type="submit">cotiz</button></form>
+          <form method="post" action="/admin/comptes/{{.ID}}/licence">{{csrf $}}<button class="btn btn-outline" type="submit">licence</button></form>
+        </td>
+      </tr>
+      {{end}}
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{t . "admin_paiements"}}</h2>
+  <div class="table-wrap carte" style="padding:0;overflow:hidden;">
+    <table class="table">
+      <tr><th>Objet</th><th>{{t . "champ_email"}}</th><th>{{t . "evt_tarif"}}</th><th>Statut</th><th>{{t . "evt_date"}}</th><th></th></tr>
+      {{range .Data.paiements}}
+      <tr>
+        <td>{{.Objet}}{{if .ObjetID}} <span class="muted" style="font-size:.75rem;">{{.ObjetID}}</span>{{end}}</td>
+        <td class="muted" style="font-size:.8rem;">{{.CompteID}}</td>
+        <td>{{prix .Montant}}</td>
+        <td><span class="badge">{{.Statut}}</span></td>
+        <td>{{date .CreatedAt}}</td>
+        <td>{{if eq .Statut "EN_ATTENTE"}}<form method="post" action="/admin/paiements/{{.ID}}/payer">{{csrf $}}<button class="btn btn-gold" type="submit">{{t $ "bouton_marquer_paye"}}</button></form>{{end}}</td>
+      </tr>
+      {{end}}
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{t . "admin_inscriptions"}}</h2>
+  <div class="table-wrap carte" style="padding:0;overflow:hidden;">
+    <table class="table">
+      <tr><th>{{t . "champ_email"}}</th><th>{{t . "nav_evenements"}}</th><th>Statut</th><th>{{t . "evt_date"}}</th></tr>
+      {{range .Data.inscriptions}}
+      <tr><td>{{.email}}</td><td>{{.evenement}}</td><td><span class="badge">{{.statut}}</span></td><td>{{date .date}}</td></tr>
+      {{end}}
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <form method="post" action="/admin/purge" data-confirm="Purger les sessions expirées ?">{{csrf .}}<button class="btn btn-danger" type="submit">{{t . "bouton_supprimer"}} (purge sessions)</button></form>
+</section>
+{{end}}

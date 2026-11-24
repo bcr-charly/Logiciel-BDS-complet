@@ -1,0 +1,44 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "profil_titre"}}</h1>
+{{with .Data.compte}}
+<article class="carte" style="margin-top:1.2rem;">
+  <p style="margin:0;font-size:1.1rem;font-weight:700;">{{.Prenom}} {{.Nom}} <span class="muted" style="font-weight:400;">({{.Login}})</span></p>
+  <p class="muted" style="margin:.3rem 0 0;">{{.Email}}
+    {{if .EmailVerifie}}<span class="badge badge-ouverture">{{t $ "profil_email_verifiee"}}</span>{{else}}<span class="badge badge-cloture">{{t $ "profil_email_non_verifiee"}}</span>{{end}}
+  </p>
+  <p style="margin:.6rem 0 0;font-size:.9rem;">
+    {{t $ "profil_cotiz"}} : {{if .CotizPayee}}<span class="badge badge-ouverture">{{t $ "statut_payee"}}</span>{{else}}<span class="badge badge-cloture">{{t $ "statut_non_payee"}}</span>{{end}}
+    · {{t $ "profil_licence"}} : {{if .LicencePayee}}<span class="badge badge-ouverture">{{t $ "statut_payee"}}</span>{{else}}<span class="badge badge-cloture">{{t $ "statut_non_payee"}}</span>{{end}}
+  </p>
+  <div class="actions" style="margin-top:.8rem;">
+    <form method="post" action="/profil/payer">{{csrf $}}<input type="hidden" name="objet" value="cotiz"><button class="btn btn-outline" type="submit">{{t $ "profil_payer_cotiz"}} ({{$.Data.cotiz_prix}} €)</button></form>
+    <form method="post" action="/profil/payer">{{csrf $}}<input type="hidden" name="objet" value="licence"><button class="btn btn-outline" type="submit">{{t $ "profil_payer_licence"}} ({{$.Data.licence_prix}} €)</button></form>
+  </div>
+</article>
+{{end}}
+
+<h2 class="section-title" style="margin-top:2.2rem;font-size:1.2rem;">{{t . "profil_mes_inscriptions"}}</h2>
+{{if .Data.inscriptions}}
+<div class="liste">
+  {{range .Data.inscriptions}}
+  <article class="carte">
+    <strong>{{.evenement}}</strong> — <span class="badge">{{.statut}}</span>
+    <p class="muted" style="margin:.3rem 0 0;font-size:.8rem;">{{date .date}}</p>
+    {{if .qr}}<p style="margin:.4rem 0 0;font-size:.75rem;word-break:break-all;color:var(--or-champagne);">{{t $ "profil_qr"}} : {{.qr}}</p>{{end}}
+  </article>
+  {{end}}
+</div>
+{{end}}
+
+<h2 class="section-title" style="margin-top:2.2rem;font-size:1.2rem;">{{t . "profil_mes_commandes"}}</h2>
+{{if .Data.commandes}}
+<div class="liste">
+  {{range .Data.commandes}}
+  <article class="carte">
+    {{range .Lignes}}<p style="margin:0;">{{.Quantite}} × {{.Nom}} — {{prix .PrixUnitaire}}</p>{{end}}
+    <p style="margin:.4rem 0 0;"><strong>{{prix .Total}}</strong> — <span class="badge">{{.Statut}}</span></p>
+  </article>
+  {{end}}
+</div>
+{{end}}
+{{end}}

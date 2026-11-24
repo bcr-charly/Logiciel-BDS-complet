@@ -1,0 +1,57 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "resp_titre"}} — {{.Data.nom_sport}}</h1>
+
+<section class="section">
+  <h2>{{t . "resp_inscrits"}}</h2>
+  <div class="table-wrap carte" style="padding:0;overflow:hidden;">
+    <table class="table">
+      <tr><th>{{t . "champ_email"}}</th><th>{{t . "champ_nom"}}</th><th>{{t . "profil_cotiz"}}</th><th>{{t . "profil_licence"}}</th></tr>
+      {{range .Data.adherents}}
+      <tr>
+        <td>{{.Email}}</td><td>{{.Prenom}} {{.Nom}}</td>
+        <td>{{if .CotizPayee}}<span class="badge badge-ouverture">{{t $ "statut_payee"}}</span>{{else}}<span class="badge badge-cloture">{{t $ "statut_non_payee"}}</span>{{end}}</td>
+        <td>{{if .LicencePayee}}<span class="badge badge-ouverture">{{t $ "statut_payee"}}</span>{{else}}<span class="badge badge-cloture">{{t $ "statut_non_payee"}}</span>{{end}}</td>
+      </tr>
+      {{end}}
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{t . "resp_equipes"}}</h2>
+  <form method="post" action="/resp/{{.Data.sport}}/equipes" class="carte form" style="padding:1.2rem;">
+    {{csrf .}}
+    {{template "champ" (dict "label" (t . "champ_nom") "type" "text" "name" "nom" "required" true)}}
+    {{template "champ" (dict "label" "Adversaire" "type" "text" "name" "adversaire")}}
+    {{template "champ" (dict "label" (t . "champ_date") "type" "datetime-local" "name" "date" "required" true)}}
+    {{template "champ" (dict "label" (t . "champ_lieu") "type" "text" "name" "lieu")}}
+    <button class="btn btn-gold" type="submit">{{t . "bouton_creer"}}</button>
+  </form>
+  <p style="margin-top:.8rem;"><a class="btn btn-outline" href="/resp/{{.Data.sport}}/equipes.csv">{{t . "bouton_exporter_csv"}}</a></p>
+  <div class="liste" style="margin-top:1rem;">
+    {{range .Data.equipes}}
+    <article class="carte">
+      <strong>{{.Nom}}</strong> {{if .Adversaire}}vs {{.Adversaire}}{{end}} — <span class="muted">{{date .Date}}</span>
+      <form method="post" action="/resp/$.Data.sport/equipes/{{.ID}}/supprimer" style="display:inline;" data-confirm="Supprimer ?">{{csrf $}}<button class="btn btn-danger" type="submit">{{t $ "bouton_supprimer"}}</button></form>
+    </article>
+    {{end}}
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{t . "resp_annonces"}}</h2>
+  <form method="post" action="/resp/{{.Data.sport}}/annonces" class="carte form" style="padding:1.2rem;">
+    {{csrf .}}
+    {{template "champ" (dict "label" (t . "champ_titre") "type" "text" "name" "titre" "required" true)}}
+    <label class="champ-label">{{t . "champ_contenu"}}<textarea class="champ" name="contenu" required></textarea></label>
+    <label class="champ-label">{{t . "champ_type"}}
+      <select class="champ" name="type">
+        <option value="info">{{t . "type_info"}}</option>
+        <option value="ouverture">{{t . "type_ouverture"}}</option>
+        <option value="resultats">{{t . "type_resultats"}}</option>
+      </select>
+    </label>
+    <button class="btn btn-gold" type="submit">{{t . "bouton_creer"}}</button>
+  </form>
+</section>
+{{end}}

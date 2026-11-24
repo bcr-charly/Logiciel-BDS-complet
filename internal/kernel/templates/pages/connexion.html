@@ -1,0 +1,11 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "connexion_titre"}}</h1>
+<form method="post" action="/connexion" class="carte form" style="margin-top:1.5rem;padding:1.5rem;">
+  {{csrf .}}
+  <input type="hidden" name="next" value="{{.Data.next}}">
+  {{template "champ" (dict "label" (t . "connexion_ident") "type" "text" "name" "ident" "required" true)}}
+  {{template "champ" (dict "label" (t . "connexion_mdp") "type" "password" "name" "password" "required" true)}}
+  <button class="btn btn-gold" type="submit">{{t . "connexion_bouton"}}</button>
+  <p class="muted" style="margin:0;"><a href="/inscription">{{t . "inscription_titre"}}</a></p>
+</form>
+{{end}}
