@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "football",
+    "nom": "Football",
+    "description": "Tournois inter-écoles, matchs FFSU 7 vs 7 et 11 vs 11, entraînements hebdomadaires.",
+    "responsable": ""
+  },
+  {
+    "slug": "basketball",
+    "nom": "Basketball",
+    "description": "Tournois 3x3 et 5x5, championnats FFSU, séances libres au gymnase.",
+    "responsable": ""
+  },
+  {
+    "slug": "volley-ball",
+    "nom": "Volley-ball",
+    "description": "Équipe en championnat FFSU, tournois indoor et beach-volley l'été.",
+    "responsable": ""
+  },
+  {
+    "slug": "handball",
+    "nom": "Handball",
+    "description": "Matchs FFSU, tournois inter-écoles et sorties sportives.",
+    "responsable": ""
+  },
+  {
+    "slug": "course-a-pied",
+    "nom": "Course à pied",
+    "description": "Cross de l'ENSIIE, sorties running et relais inter-écoles.",
+    "responsable": ""
+  }
+]

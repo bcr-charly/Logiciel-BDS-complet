@@ -1,0 +1,11 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "qr_titre"}}</h1>
+<form method="post" action="/qr/verifier" class="carte form" style="margin-top:1.2rem;padding:1.2rem;">
+  {{csrf .}}
+  {{template "champ" (dict "label" (t . "qr_token") "type" "text" "name" "token" "required" true "value" .Data.token)}}
+  <button class="btn btn-gold" type="submit">{{t . "qr_verifier"}}</button>
+</form>
+{{if .Data.resultat}}
+<p class="flash" style="margin-top:1rem;">{{t . .Data.resultat}}</p>
+{{end}}
+{{end}}

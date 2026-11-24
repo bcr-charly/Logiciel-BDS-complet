@@ -1,0 +1,16 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "inscription_titre"}}</h1>
+<form method="post" action="/inscription" class="carte form" style="margin-top:1.5rem;padding:1.5rem;">
+  {{csrf .}}
+  {{template "champ" (dict "label" (t . "champ_email") "type" "email" "name" "email" "required" true)}}
+  {{template "champ" (dict "label" (t . "champ_identifiant") "type" "text" "name" "login" "required" true)}}
+  {{template "champ" (dict "label" (t . "champ_mdp") "type" "password" "name" "password" "required" true)}}
+  {{template "champ" (dict "label" (t . "champ_mdp_conf") "type" "password" "name" "password2" "required" true)}}
+  {{template "champ" (dict "label" (t . "champ_nom") "type" "text" "name" "nom" "required" true)}}
+  {{template "champ" (dict "label" (t . "champ_prenom") "type" "text" "name" "prenom" "required" true)}}
+  {{template "champ" (dict "label" (t . "champ_telephone") "type" "tel" "name" "telephone")}}
+  {{template "champ" (dict "label" (t . "champ_annee") "type" "text" "name" "annee")}}
+  {{template "champ" (dict "label" (t . "champ_sport") "type" "text" "name" "sport")}}
+  <button class="btn btn-gold" type="submit">{{t . "inscription_bouton"}}</button>
+</form>
+{{end}}

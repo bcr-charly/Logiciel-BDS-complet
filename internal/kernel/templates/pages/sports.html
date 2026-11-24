@@ -1,0 +1,13 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "sports_titre"}}</h1>
+{{if .Data.sports}}
+<div class="grid">
+  {{range .Data.sports}}
+  <a class="carte" href="/sports/{{.Slug}}" style="text-decoration:none;color:inherit;display:block;">
+    <h3 style="margin:0 0 .4rem;font-size:1.15rem;color:var(--eclat);">{{.Nom}}</h3>
+    <p style="margin:0;color:rgba(221,203,149,.9);font-size:.9rem;line-height:1.5;">{{.Description}}</p>
+  </a>
+  {{end}}
+</div>
+{{end}}
+{{end}}

@@ -1,0 +1,58 @@
+{{define "layout"}}<!DOCTYPE html>
+<html lang="{{.Lang}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{if .Extra.title}}{{.Extra.title}} — {{end}}{{t . "site_nom"}}</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="icon" type="image/jpeg" href="/static/logo-bds.jpg">
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <a class="brand" href="/">
+      <img src="{{asset "logo-bds.jpg"}}" alt="{{t . "site_nom"}}" class="brand-logo">
+      <span class="brand-text">{{t . "site_nom"}}</span>
+    </a>
+    <nav class="nav">
+      <a class="btn btn-outline" href="/sports">{{t . "nav_sports"}}</a>
+      <a class="btn btn-outline" href="/bds">{{t . "nav_bds"}}</a>
+      <a class="btn btn-outline" href="/evenements">{{t . "nav_evenements"}}</a>
+      <a class="btn btn-outline" href="/boutique">{{t . "nav_boutique"}}</a>
+      <a class="btn btn-outline" href="/actus">{{t . "nav_actus"}}</a>
+      {{if hasrole . "admin"}}<a class="btn btn-outline" href="/admin">{{t . "nav_admin"}}</a>{{end}}
+      {{if hasrole . "responsable"}}<a class="btn btn-outline" href="/resp">{{t . "nav_resp"}}</a>{{end}}
+      {{if .User}}
+        <a class="btn btn-gold" href="/profil">{{t . "nav_profil"}}</a>
+        <form method="post" action="/deconnexion" class="inline">{{csrf .}}<button class="btn btn-outline" type="submit">{{t . "nav_deconnexion"}}</button></form>
+      {{else}}
+        <a class="btn btn-gold" href="/connexion">{{t . "nav_connexion"}}</a>
+      {{end}}
+      <span class="lang-switch" title="Langue / Language">
+        <a href="/lang/fr" class="{{if eq .Lang "fr"}}active{{end}}">🇫🇷</a>
+        <a href="/lang/en" class="{{if eq .Lang "en"}}active{{end}}">🇬🇧</a>
+      </span>
+    </nav>
+  </div>
+  <div class="ligne-or"></div>
+</header>
+<main class="main">
+  {{if .Flash}}<p class="flash">{{t . .Flash}}</p>{{end}}
+  {{template "content" .}}
+</main>
+<footer class="footer">
+  <div class="ligne-or"></div>
+  <div class="footer-inner">
+    <p class="footer-brand">{{t . "site_nom"}}</p>
+    <p class="footer-contact">{{t . "footer_contact"}}</p>
+    {{if .Extra.partenaires}}
+    <p class="footer-partenaires">{{t . "footer_partenaires"}} :
+      {{range .Extra.partenaires}}{{if .URL}}<a href="{{.URL}}">{{.Nom}}</a>{{else}}<span>{{.Nom}}</span>{{end}} · {{end}}
+    </p>
+    {{end}}
+  </div>
+</footer>
+<script src="/static/app.js" defer></script>
+</body>
+</html>
+{{end}}

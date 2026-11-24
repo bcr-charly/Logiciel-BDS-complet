@@ -1,0 +1,13 @@
+{{define "content"}}
+<h1 class="section-title">{{t . "equipe_titre"}}</h1>
+{{if .Data.equipe}}
+<div class="grid">
+  {{range .Data.equipe}}
+  <article class="carte" style="text-align:center;">
+    <p style="margin:0;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--or-satin);font-size:.8rem;">{{.Role}}</p>
+    <p style="margin:.4rem 0 0;font-size:1.05rem;">{{.Prenom}} {{.Nom}}</p>
+  </article>
+  {{end}}
+</div>
+{{end}}
+{{end}}

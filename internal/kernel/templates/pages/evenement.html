@@ -1,0 +1,36 @@
+{{define "content"}}
+{{with .Data.evt}}
+<article class="carte">
+  <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:baseline;">
+    <h1 class="section-title" style="margin:0;">{{.Nom}}</h1>
+    <span class="badge badge-{{.Sport}}">{{.Sport}}</span>
+  </div>
+  <p class="muted" style="margin:.6rem 0 0;">{{date .Date}} — {{.Lieu}}</p>
+  {{if .Description}}<p style="margin:.6rem 0 0;line-height:1.6;max-width:720px;">{{.Description}}</p>{{end}}
+  <p style="margin:.8rem 0 0;font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;color:var(--or-champagne);">
+    {{if .Cloturee}}<span class="badge badge-cloture">{{t $ "evt_cloture"}}</span>
+    {{else if eq $.Data.restantes 0}}<span class="badge badge-cloture">{{t $ "evt_complet"}}</span>
+    {{else}}{{if .Tarif}}{{t $ "evt_tarif"}} : {{prix .Tarif}}{{else}}{{t $ "evt_gratuit"}}{{end}}{{end}}
+    — {{if eq .PlacesMax 0}}{{t $ "evt_illimite"}}{{else}}{{$.Data.restantes}} {{t $ "evt_restantes"}} / {{.PlacesMax}}{{end}}
+    ({{len $.Data.inscrits}} {{t $ "evt_inscrits"}})
+    {{if .ExigeCotiz}} · {{t $ "evt_cotiz_requise"}}{{end}}
+    {{if .ExigeLicence}} · {{t $ "evt_licence_requise"}}{{end}}
+  </p>
+</article>
+{{end}}
+
+{{if .User}}
+  {{if .Data.deja_inscrit}}
+    <p class="flash">{{t . "evt_deja_inscrit"}}</p>
+  {{else if and (not .Data.evt.Cloturee) (gt .Data.restantes 0)}}
+    <form method="post" action="/evenements/{{.Data.evt.ID}}/inscrire" class="form" style="margin-top:1.5rem;">
+      {{csrf .}}
+      <button class="btn btn-gold btn-big" type="submit">{{t . "evt_sinscrire"}}</button>
+    </form>
+  {{end}}
+{{else}}
+  <p style="margin-top:1.5rem;"><a class="btn btn-gold btn-big" href="/connexion?next=/evenements/{{.Data.evt.ID}}">{{t . "evt_sinscrire"}}</a></p>
+{{end}}
+
+<p style="margin-top:2rem;"><a href="/evenements" class="btn btn-outline">← {{t . "nav_evenements"}}</a></p>
+{{end}}

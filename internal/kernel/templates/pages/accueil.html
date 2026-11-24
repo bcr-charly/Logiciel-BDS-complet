@@ -1,0 +1,15 @@
+{{define "content"}}
+<section class="hero">
+  <img class="hero-logo" src="{{asset "logo-bds.jpg"}}" alt="Logo BDS ENSIIE">
+  <p class="hero-accroche">{{if eq .Lang "en"}}{{.Data.accueil.AccrocheEn}}{{else}}{{.Data.accueil.Accroche}}{{end}}</p>
+  <div class="hero-actions">
+    <a class="btn btn-gold btn-big" href="/sports">{{t . "accueil_nos_sports"}}</a>
+    {{if .User}}
+      <a class="btn btn-outline btn-big" href="/profil">{{t . "nav_profil"}}</a>
+    {{else}}
+      <a class="btn btn-outline btn-big" href="/inscription">{{t . "accueil_inscription"}}</a>
+    {{end}}
+  </div>
+</section>
+{{template "bande_annonces" (dict "V" $ "Annonces" .Data.annonces)}}
+{{end}}
