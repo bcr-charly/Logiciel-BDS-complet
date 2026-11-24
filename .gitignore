@@ -8,3 +8,5 @@ data/*.tmp
 # divers
 *.log
 .DS_Store
+*.db
+*.db-journal
